@@ -108,7 +108,7 @@ function buttonEmptyCartListener() {
     const cart = document.querySelector('.cart__items');
 
     CART_IDS = [];
-    cart.innerHTML = [];
+    cart.innerHTML = '';
     updateLocalStorage();
     updatePrice();
   });
