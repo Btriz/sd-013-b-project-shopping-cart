@@ -167,8 +167,8 @@ function getLocalStorage() {
 
 window.onload = async () => {
   const products = await getProducts();
-  addItemsToScreen(products);
-  buttonAddToCartListener();
+  await addItemsToScreen(products);
+  await buttonAddToCartListener();
   await getLocalStorage();
-  buttonEmptyCartListener();
+  await buttonEmptyCartListener();
 };
