@@ -22,13 +22,12 @@ function hideLoading() {
 
 // SALVA NO LOCAL STORAGE
 async function updateLocalStorage() {
-  await localStorage.clear();
-  await localStorage.setItem('CART_IDS', JSON.stringify(CART_IDS));
-  // updatePrices();
+  localStorage.clear();
+  localStorage.setItem('CART_IDS', JSON.stringify(CART_IDS));
 }
 
 async function saveToLocalStorage(itemId) {
-  await CART_IDS.push(itemId);
+  CART_IDS.push(itemId);
   updateLocalStorage();
 }
 
@@ -62,7 +61,7 @@ async function getProducts() {
   const query = 'search?q=computador';
   const baseURL = `https://api.mercadolibre.com/sites/MLB/${query}`;
 
-  await showLoading();
+  showLoading();
   const response = await fetch(baseURL);
   hideLoading();
   const products = await response.json();
@@ -166,9 +165,9 @@ function getLocalStorage() {
 }
 
 window.onload = async () => {
+  buttonEmptyCartListener();
   const products = await getProducts();
-  await addItemsToScreen(products);
-  await buttonAddToCartListener();
-  await getLocalStorage();
-  await buttonEmptyCartListener();
+  addItemsToScreen(products);
+  buttonAddToCartListener();
+  getLocalStorage();
 };
