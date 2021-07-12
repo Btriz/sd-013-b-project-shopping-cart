@@ -1,5 +1,5 @@
 let CART_IDS = [];
-let CART_PRICES = [];
+
 async function fetchById(id) {
   return fetch(`https://api.mercadolibre.com/items/${id}`)
     .then((response) => response.json());
@@ -19,31 +19,6 @@ function hideLoading() {
   const loading = document.querySelector('.loading');
   body.removeChild(loading);
 }
-
-// PREÇO
-// function total(prices) {
-//   const t = prices.reduce((acc, price) => acc + price);
-//   console.log(t);
-// }
-
-// async function getPrices(id) {
-//   await fetchById(id)
-//   .then((obj) => (obj.price))
-//   .then((item) => {
-//     CART_PRICES.push(item);
-//   });
-// }
-
-// async function calculatePrice() {
-//   await CART_IDS.forEach((p) => {
-//     getPrices(p);
-//   });
-// }
-
-// async function updatePrices() {
-  
-//   await calculatePrice();
-// }
 
 // SALVA NO LOCAL STORAGE
 async function updateLocalStorage() {
@@ -102,6 +77,18 @@ function addItemsToScreen(products) {
   });
 }
 
+// PREÇO
+function updatePrice() {
+  const currentPrice = document.querySelector('.total-price');
+  let total = 0;
+
+  document.querySelectorAll('.cart__item').forEach((item) => {
+    const itemPrice = item.innerHTML.split('$')[1];
+    total += parseFloat(itemPrice);
+  });
+  currentPrice.innerHTML = `${Math.round(total * 100) / 100}`;
+}
+
 // REMOVE DO CARRINHO
 function cartItemClickListener(event) {
   const item = event.target;
@@ -111,6 +98,7 @@ function cartItemClickListener(event) {
   CART_IDS.splice(index, 1);
   parent.removeChild(item);
   updateLocalStorage();
+  updatePrice();
 }
 
 function buttonEmptyCartListener() {
@@ -122,6 +110,7 @@ function buttonEmptyCartListener() {
     CART_IDS = [];
     cart.innerHTML = [];
     updateLocalStorage();
+    updatePrice();
   });
 }
 
@@ -151,6 +140,7 @@ async function addToCart(itemId) {
     cart.appendChild(item);
   });
   hideLoading();
+  updatePrice();
 }
 
 function buttonAddToCartListener() {
@@ -180,7 +170,5 @@ window.onload = async () => {
   addItemsToScreen(products);
   buttonAddToCartListener();
   await getLocalStorage();
-  CART_PRICES = [];
-  console.log(CART_PRICES.length, 'getLocal');
   buttonEmptyCartListener();
 };
